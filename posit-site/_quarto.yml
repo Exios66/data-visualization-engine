@@ -1,0 +1,145 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - docs/get-started.qmd
+    - docs/features.qmd
+    - docs/about.qmd
+    - docs/ARCHITECTURE.md
+    - docs/PROMPT-DESIGN.md
+    - docs/DATA-VIZ-REFERENCE.md
+    - docs/analysis.qmd
+    - docs/chart-taxonomy.qmd
+    - docs/api-reference.qmd
+    - docs/repository-map.qmd
+    - docs/STRUCTURE.md
+    - docs/ROUTES.md
+    - docs/CONTRIBUTING.md
+    - docs/changelog.qmd
+
+website:
+  title: "VizAdvisor"
+  site-url: https://connect.posit.cloud/jackjburleson/content/019f9a69-7c76-3f0a-e2b1-c586d1b61682
+  description: "SME data visualization consultant — LLM recommendations, chart taxonomy, R/Python analysis, and full project documentation"
+  favicon: assets/vite.svg
+  repo-url: https://github.com/Exios66/vizadvisor
+  repo-actions: [source, issue]
+  page-navigation: true
+  navbar:
+    background: "#C5050C"
+    foreground: white
+    left:
+      - href: index.qmd
+        text: Overview
+      - href: docs/get-started.qmd
+        text: Get Started
+      - href: docs/features.qmd
+        text: Features
+      - text: Documentation
+        menu:
+          - href: docs/ARCHITECTURE.md
+            text: Architecture
+          - href: docs/PROMPT-DESIGN.md
+            text: Prompt Design
+          - href: docs/DATA-VIZ-REFERENCE.md
+            text: Data Viz Reference
+          - href: docs/analysis.qmd
+            text: Analysis Service
+          - href: docs/chart-taxonomy.qmd
+            text: Chart Taxonomy
+          - href: docs/api-reference.qmd
+            text: API & Routes
+          - href: docs/repository-map.qmd
+            text: Repository Map
+          - href: docs/STRUCTURE.md
+            text: Directory Structure
+      - text: Project
+        menu:
+          - href: docs/about.qmd
+            text: About
+          - href: docs/CONTRIBUTING.md
+            text: Contributing
+          - href: docs/changelog.qmd
+            text: Changelog
+          - href: docs/ROUTES.md
+            text: Client Routes
+    right:
+      - icon: github
+        href: https://github.com/Exios66/vizadvisor
+        aria-label: GitHub repository Exios66/vizadvisor
+      - icon: github
+        href: https://github.com/Exios66
+        text: Exios66
+        aria-label: GitHub profile Exios66
+  page-footer:
+    left: "VizAdvisor · Jack J. Burleson · UW–Madison"
+    right:
+      - text: "Built with Quarto"
+      - icon: github
+        href: https://github.com/Exios66/vizadvisor
+        aria-label: GitHub repository
+      - icon: github
+        href: https://github.com/Exios66
+        text: Exios66
+        aria-label: GitHub profile Exios66
+  sidebar:
+    style: "floating"
+    contents:
+      - section: "Start here"
+        contents:
+          - index.qmd
+          - docs/get-started.qmd
+          - docs/features.qmd
+          - docs/about.qmd
+      - section: "Core documentation"
+        contents:
+          - docs/ARCHITECTURE.md
+          - docs/PROMPT-DESIGN.md
+          - docs/DATA-VIZ-REFERENCE.md
+          - docs/chart-taxonomy.qmd
+      - section: "Systems & API"
+        contents:
+          - docs/analysis.qmd
+          - docs/api-reference.qmd
+          - docs/ROUTES.md
+          - docs/repository-map.qmd
+          - docs/STRUCTURE.md
+      - section: "Project"
+        contents:
+          - docs/CONTRIBUTING.md
+          - docs/changelog.qmd
+
+crossref:
+  fig-title: "Figure"
+  tbl-title: "Table"
+  title-delim: "."
+
+format:
+  html:
+    theme:
+      - cosmo
+      - styles.scss
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    number-sections: true
+    code-fold: true
+    code-tools: true
+    code-link: true
+    df-print: paged
+    link-external-newwindow: true
+    smooth-scroll: true
+    citations-hover: true
+    footnotes-hover: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+
+execute:
+  echo: true
+  warning: false
+  message: false
+  freeze: auto
+
+bibliography: references.bib
+csl: https://www.zotero.org/styles/apa

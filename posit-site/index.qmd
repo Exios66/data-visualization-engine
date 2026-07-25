@@ -1,0 +1,165 @@
+---
+title: "VizAdvisor"
+subtitle: "A subject-matter-expert data visualization consultant powered by LLMs, grounded in Tufte, Munzner, and Cairo"
+author:
+  - name: Jack J. Burleson
+    url: https://github.com/Exios66
+    affiliations:
+      - University of Wisconsin–Madison
+    corresponding: true
+date: last-modified
+abstract: |
+  VizAdvisor is a full-stack web application that helps analysts, researchers, and
+  communicators describe a dataset and a visualization goal, then receive structured,
+  LLM-powered recommendations for chart type, visual encodings, accessibility, pitfalls,
+  and ready-to-run code scaffolds. Optional pre- and post-visualization statistical
+  analysis runs through R or Python on a self-hostable Express proxy. This Posit Connect
+  Cloud site documents the product end-to-end — architecture, prompt design, chart
+  taxonomy, analysis service, API routes, and contribution guidelines — using the
+  complete content of the open-source repository.
+keywords:
+  - data visualization
+  - large language models
+  - chart recommendation
+  - Quarto
+  - React
+  - R
+  - Python
+  - Posit Connect Cloud
+  - accessibility
+nocite: |
+  @tufte2001, @munzner2014, @cairo2012, @few2012, @ware2012, @wilke2019, @positconnect, @quarto, @github
+---
+
+::: {.github-access}
+[GitHub repository](https://github.com/Exios66/vizadvisor){.github-btn}
+[Exios66 profile](https://github.com/Exios66){.github-btn}
+:::
+
+## 1 Overview
+
+VizAdvisor is a **frontend-first** SME (subject matter expert) visualization advisor. Users upload or paste CSV/JSON data, select a communication goal, set audience and tooling constraints, and receive a validated JSON recommendation that drives a rich UI: primary chart, alternatives, design decisions, pitfall warnings, follow-up questions, and a syntax-highlighted code scaffold.
+
+The application is intentionally modular. Prompt construction, LLM communication, schema inference, and UI rendering are decoupled so providers, chart libraries, and presentation can change independently [@munzner2014; @tufte2001; @cairo2012].
+
+::: {.research-focus-block}
+### Product focus
+
+| ID | Capability | What success looks like |
+| --- | --- | --- |
+| F1 | Schema-aware recommendations | Chart advice cites concrete columns, types, and cardinalities — not generic tips |
+| F2 | Structured LLM output | Valid JSON schema powers UI cards; free-form prose is rejected |
+| F3 | Optional statistical analysis | Pre/post-viz descriptive, regression, power, mediation, factorial via R or Python |
+| F4 | Privacy-aware defaults | Recommendations send schema + ≤5 sample rows; analysis is opt-in and self-hostable |
+:::
+
+## 2 Core data flow
+
+```{mermaid}
+flowchart LR
+  A[Upload / paste data] --> B[Schema inference]
+  B --> C{Optional pre-viz analysis}
+  C --> D[Goal + parameters]
+  D --> E[PromptBuilder]
+  E --> F["POST /api/recommend"]
+  F --> G[Recommendation UI]
+  G --> H{Optional post-viz analysis}
+```
+
+1. **Upload or paste** a CSV/JSON dataset (PapaParse + column-type inference).
+2. **Optional pre-viz analysis** — descriptive stats, regression, power, mediation, or factorial ANOVA.
+3. **Select a goal** — compare, trend, distribution, correlation, part-of-whole, geospatial, network, ranking.
+4. **Set parameters** — audience, chart library, interactivity, accessibility, notes.
+5. **LLM recommend** via Express proxy → Anthropic / OpenAI.
+6. **Render** recommendation cards, alternatives, design decisions, pitfalls, code, export.
+7. **Optional post-viz analysis** on the same engines.
+
+## 3 Feature highlights
+
+::: {.feature-grid}
+::: {.feature-card}
+#### CSV / JSON upload
+Drag-and-drop or paste. Automatic schema inference for quantitative, ordinal, nominal, temporal, and geographic columns.
+:::
+::: {.feature-card}
+#### Goal selection
+Eight communication goals mapped to a scored chart-candidate taxonomy in `chartTypeMapper.js`.
+:::
+::: {.feature-card}
+#### LLM recommendations
+Structured output: chart type, rationale, encodings, design decisions, code scaffold, confidence.
+:::
+::: {.feature-card}
+#### Pre- / post-viz analysis
+R or Python scripts for descriptive, regression, power, mediation, and factorial analyses.
+:::
+::: {.feature-card}
+#### Accessibility
+Colorblind-safe palettes, WCAG guidance, and ARIA-oriented recommendations in the system prompt.
+:::
+::: {.feature-card}
+#### Export & history
+Copy or download Markdown/JSON; session history persisted in `localStorage`.
+:::
+:::
+
+## 4 Tech stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | React 18 + Vite 6 |
+| Styling | Tailwind CSS |
+| State | React Context + `useReducer` |
+| Routing | React Router v6 |
+| LLM | Anthropic Claude / OpenAI (via proxy) |
+| Data parsing | PapaParse |
+| Code highlighting | Prism.js |
+| Analysis | R (`jsonlite`, `dplyr`, …) or Python (`pandas`, `statsmodels`, …) |
+| Testing | Vitest + Testing Library |
+| This site | Quarto website → Posit Connect Cloud |
+
+## 5 Documentation map
+
+| Page | Contents |
+|------|----------|
+| [Get Started](docs/get-started.qmd) | Prerequisites, env vars, `run.sh`, production build |
+| [Features](docs/features.qmd) | Full feature inventory from the product README |
+| [Architecture](docs/ARCHITECTURE.md) | Layers, data flow, security, extensibility |
+| [Prompt Design](docs/PROMPT-DESIGN.md) | System/user prompts, JSON schema, failure modes |
+| [Data Viz Reference](docs/DATA-VIZ-REFERENCE.md) | Chart taxonomy, encodings, pitfalls encyclopedia |
+| [Analysis Service](docs/analysis.qmd) | R/Python engines, endpoint contract, packages |
+| [Chart Taxonomy](docs/chart-taxonomy.qmd) | Goal → candidate scores from source |
+| [API & Routes](docs/api-reference.qmd) | Client routes + `/api/recommend` + `/api/analyze` |
+| [Repository Map](docs/repository-map.qmd) | Mermaid map of the monorepo |
+| [About](docs/about.qmd) | Theory foundation, privacy, technology |
+
+## 6 Application routes
+
+| Path | Description |
+|------|-------------|
+| `/` | Landing page |
+| `/advisor` | Main tool — upload, goal, recommend, analyze |
+| `/about` | Product overview and data handling |
+
+API: `POST /api/recommend` (LLM proxy), `POST /api/analyze` (R/Python).
+
+## 7 Quick start
+
+```bash
+git clone https://github.com/Exios66/vizadvisor.git
+cd vizadvisor
+npm install
+cp .env.example .env
+cp server/.env.example server/.env
+# Set ANTHROPIC_API_KEY (or OpenAI) in server/.env
+./run.sh
+# → http://localhost:5173/advisor
+```
+
+See [Get Started](docs/get-started.qmd) for full environment variable tables and analysis package setup.
+
+## 8 License & authorship
+
+Personal development project by [Jack J. Burleson](https://github.com/Exios66) (GitHub: Exios66 / jjburleson). Source: [github.com/Exios66/vizadvisor](https://github.com/Exios66/vizadvisor).
+
+## References

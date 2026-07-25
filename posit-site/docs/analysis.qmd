@@ -1,0 +1,98 @@
+---
+title: "Analysis Service"
+subtitle: "Optional R and Python statistical analysis for pre- and post-visualization workflows"
+---
+
+The Express server runs R or Python scripts for statistical analysis. Data stays under user control: the browser sends schema and rows to a self-hostable proxy; scripts read JSON on stdin and write JSON on stdout.
+
+Source: `server/analysis/` · runner: `server/analysis/runner.js` · endpoint: `POST /api/analyze`.
+
+## Requirements
+
+### R
+
+```r
+install.packages(
+  c("jsonlite", "dplyr", "tidyr", "broom", "car", "pwr", "lavaan"),
+  repos = "https://cloud.r-project.org"
+)
+```
+
+Scripts live under `server/analysis/r/`:
+
+| Script | Analysis |
+|--------|----------|
+| `descriptive.R` | Summary stats, optional group-by |
+| `regression.R` | Linear regression / ANOVA |
+| `power.R` | Power analysis |
+| `mediation.R` | X → M → Y mediation |
+| `factorial.R` | Factorial ANOVA (2–3 factors) |
+
+### Python
+
+```bash
+pip install -r server/requirements.txt
+```
+
+Dependencies: `pandas`, `scipy`, `statsmodels`, `numpy`. Parallel scripts live under `server/analysis/python/`.
+
+## Environment
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ANALYSIS_TIMEOUT_MS` | Script timeout | `60000` |
+| `R_PATH` | Path to `Rscript` | `Rscript` |
+| `PYTHON_PATH` | Path to Python | `python3` |
+
+## Endpoint contract
+
+`POST /api/analyze`
+
+Body:
+
+```json
+{
+  "engine": "r",
+  "analysisType": "descriptive",
+  "data": [{ "x": 1, "y": 2 }],
+  "config": { "columns": ["x", "y"], "groupBy": null }
+}
+```
+
+| Field | Values |
+|-------|--------|
+| `engine` | `r` \| `python` |
+| `analysisType` | `descriptive` \| `regression` \| `power` \| `mediation` \| `factorial` |
+| `data` | Array of row objects (≤ 1,000 recommended) |
+| `config` | Type-specific configuration |
+
+## Example — descriptive (R)
+
+```r
+# Excerpt from server/analysis/r/descriptive.R
+suppressPackageStartupMessages({
+  library(jsonlite)
+  library(dplyr)
+  library(tidyr)
+})
+
+input <- readLines(file("stdin"), warn = FALSE)
+parsed <- fromJSON(paste(input, collapse = "\n"))
+data <- as.data.frame(parsed$data)
+config <- parsed$config
+
+# Computes n, mean, sd, min, max, missing per numeric column
+# Optional groupBy produces by_group summaries
+```
+
+## UI integration
+
+- `AnalysisPanel.jsx` — engine selector, analysis type, config forms, Run
+- `AnalysisResults.jsx` — renders structured results
+- Hooks: `useAnalysis.js` · service: `analysisService.js`
+
+Pre-viz analysis can inform the recommendation prompt; post-viz analysis supports follow-up statistical questions after a chart is chosen.
+
+## Privacy note
+
+Analysis is **opt-in**. Recommendation calls never send full datasets — only schema + ≤5 sample rows. Prefer a self-hosted proxy in production so API keys and analysis data never leave your infrastructure.

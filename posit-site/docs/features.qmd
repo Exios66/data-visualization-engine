@@ -1,0 +1,69 @@
+---
+title: "Features"
+subtitle: "Complete product capability inventory"
+---
+
+VizAdvisor ships as a full-stack advisor with optional statistical analysis. The inventory below mirrors the project README and CHANGELOG.
+
+## Product features
+
+| Feature | Description |
+|---------|-------------|
+| **CSV/JSON Upload** | Drag-and-drop or paste data; automatic schema inference |
+| **Goal Selection** | Compare, trend, distribution, correlation, part-of-whole, geospatial, network, ranking |
+| **LLM Recommendations** | Structured output: chart type, rationale, design decisions, code scaffold |
+| **Pre-Viz Analysis** | Optional descriptive stats, regression, power, mediation, factorial (R or Python) |
+| **Post-Viz Analysis** | Same analysis types after receiving recommendations |
+| **Dark Mode** | Theme toggle with persistent preference |
+| **Export** | Copy or download recommendations as Markdown/JSON |
+| **Session History** | Save and load past sessions (`localStorage`) |
+
+## Output components
+
+| Component | Role |
+|-----------|------|
+| `RecommendationCard` | Primary recommendation, rationale, data mapping |
+| `AlternativeOptions` | Alternative chart options |
+| `DesignDecisionsPanel` | Color, scale, annotations, accessibility |
+| `PitfallWarnings` | Pitfalls and mitigations |
+| `FollowUpQuestions` | Suggested follow-up questions |
+| `CodeSnippet` | Syntax-highlighted code with copy |
+| `MetaBadges` | Confidence and goal category |
+| `ExportButton` | Markdown / JSON export |
+
+## Input components
+
+| Component | Role |
+|-----------|------|
+| `DataUploader` | File drop or paste |
+| `DataPreview` | Schema table and type override |
+| `GoalSelector` | Goal category + description |
+| `ParameterPanel` | Audience, library, interactivity, accessibility, notes |
+| `PromptBuilder` | Submit / reset and readiness gating |
+
+## Analysis types
+
+| Type | Description |
+|------|-------------|
+| **Descriptive** | Summary stats, optional group-by |
+| **Regression** | Linear regression / ANOVA |
+| **Power** | Power analysis (u, v, f², power) |
+| **Mediation** | X → M → Y mediation |
+| **Factorial** | Factorial ANOVA (2–3 factors) |
+
+## Supported chart libraries (scaffolds)
+
+Recommendations can emit code for Recharts, D3.js, Plotly, Chart.js, Vega-Lite, Observable Plot, Matplotlib, Altair, and ggplot2 — selected via the parameter panel.
+
+## Theoretical foundations
+
+Recommendations are grounded in:
+
+- Edward Tufte — data-ink ratio, chartjunk, small multiples
+- Tamara Munzner — What–Why–How framework, channel effectiveness
+- Alberto Cairo — truthful, functional, beautiful visualization
+- Stephen Few — perceptual efficiency and dashboard design
+- Colin Ware — visual perception and pre-attentive attributes
+- Claus Wilke — principles of figure design
+
+See [Data Viz Reference](DATA-VIZ-REFERENCE.md) and [Prompt Design](PROMPT-DESIGN.md) for the full knowledge base encoded in the system prompt.

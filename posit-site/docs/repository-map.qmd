@@ -1,0 +1,68 @@
+---
+title: "Repository Map"
+subtitle: "Mermaid flowchart of the VizAdvisor monorepo"
+---
+
+The diagram below is adapted from `mermaid-map.md` in the repository root.
+
+```{mermaid}
+flowchart TD
+    ROOT([VizAdvisor])
+
+    ROOT --> CFG([Config])
+    ROOT --> PUB([public/])
+    ROOT --> SRC([src/])
+    ROOT --> SVR([server/])
+    ROOT --> TST([tests/])
+    ROOT --> DOC([docs/])
+    ROOT --> QTO([Quarto site])
+
+    CFG --> C1[README.md]
+    CFG --> C2[package.json]
+    CFG --> C3[vite.config.js]
+    CFG --> C4[run.sh]
+    CFG --> C5[_quarto.yml]
+    CFG --> C6[styles.scss]
+
+    SRC --> COMP([components/])
+    SRC --> PAGES([pages/])
+    SRC --> HOOKS([hooks/])
+    SRC --> SERV([services/])
+    SRC --> CTX([context/])
+    SRC --> UTIL([utils/])
+
+    COMP --> LAY[layout/]
+    COMP --> INP[input/]
+    COMP --> OUT[output/]
+    COMP --> ANL[analysis/]
+    COMP --> CMN[common/]
+
+    SVR --> API[index.js]
+    SVR --> AR[analysis/r/]
+    SVR --> AP[analysis/python/]
+
+    DOC --> D1[ARCHITECTURE.md]
+    DOC --> D2[PROMPT-DESIGN.md]
+    DOC --> D3[DATA-VIZ-REFERENCE.md]
+    DOC --> D4[get-started.qmd]
+
+    QTO --> Q1[index.qmd]
+    QTO --> Q2[_site/]
+```
+
+## Key paths
+
+| Path | Role |
+|------|------|
+| `src/services/promptTemplates.js` | System + user prompt assembly |
+| `src/services/llmService.js` | LLM client / proxy calls |
+| `src/utils/chartTypeMapper.js` | Goal → chart candidate scores |
+| `src/utils/columnTypeInferrer.js` | Schema type inference |
+| `src/utils/responseValidator.js` | JSON recommendation validation |
+| `server/index.js` | Express `/api/recommend` + `/api/analyze` |
+| `server/analysis/runner.js` | Spawns R/Python, validates I/O |
+| `tests/prompts/` | Golden-path prompt fixtures |
+| `docs/` | Architecture and design references |
+| `index.qmd` + `_quarto.yml` | This Posit documentation site |
+
+See also [Directory Structure](STRUCTURE.md).

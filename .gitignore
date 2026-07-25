@@ -27,3 +27,13 @@ npm-debug.log*
 
 # Vite
 .vite/
+
+# Quarto
+_site/
+.quarto/
+*_files/
+**/*.quarto_ipynb
+
+# Quarto (posit-site documentation website)
+posit-site/_site/
+posit-site/.quarto/

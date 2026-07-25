@@ -1,0 +1,70 @@
+---
+title: "API & Routes"
+subtitle: "Client routes and Express proxy endpoints"
+---
+
+## Client routes
+
+| Path | Component | Description |
+|------|-----------|-------------|
+| `/` | `HomePage` | Landing page — intro and CTA |
+| `/advisor` | `AdvisorPage` | Main tool — upload, goal, recommend, analyze |
+| `/about` | `AboutPage` | Product overview and data handling |
+| `*` | — | Redirects to `/` |
+
+Defined in `src/App.jsx` with lazy-loaded pages for code splitting. Default launcher (`run.sh`) opens `/advisor`.
+
+## Navigation
+
+- **VizAdvisor** (logo) → `/`
+- **Advisor** → `/advisor`
+- **About** → `/about`
+- **Theme toggle** — light / dark (`localStorage`)
+- **GitHub** — `VITE_REPO_URL`
+
+## Server API
+
+Base URL: `http://localhost:3001` in full-stack dev (set `VITE_API_PROXY_URL`).
+
+### `POST /api/recommend`
+
+Proxies LLM requests so API keys stay server-side.
+
+Typical body (simplified):
+
+```json
+{
+  "messages": [
+    { "role": "system", "content": "…" },
+    { "role": "user", "content": "…" }
+  ],
+  "model": "claude-sonnet-4-6",
+  "max_tokens": 2048
+}
+```
+
+Messages are assembled by `promptTemplates.buildMessages()` from session context (schema, goal, parameters, optional analysis summaries).
+
+### `POST /api/analyze`
+
+Runs R or Python analysis scripts.
+
+```json
+{
+  "engine": "python",
+  "analysisType": "regression",
+  "data": [{ "x": 1, "y": 2.1 }],
+  "config": { "formula": "y ~ x" }
+}
+```
+
+See [Analysis Service](analysis.qmd) for engines, types, and package requirements.
+
+## Security model (summary)
+
+- Production: route all LLM calls through the proxy; never expose keys in the client bundle.
+- Recommendations send schema + ≤5 sample rows.
+- Analysis is opt-in and should use a trusted/self-hosted server.
+- CORS restricted via `ALLOWED_ORIGIN`.
+
+Full detail: [Architecture](ARCHITECTURE.md) § Security Model.
