@@ -2,6 +2,21 @@
 
 A full-stack web application that helps users describe their dataset and visualization goals, then receives tailored, LLM-powered recommendations on the best visualization strategies, chart types, and parameters. Includes optional pre- and post-visualization statistical analysis via R or Python.
 
+## Live documentation (Posit Connect Cloud)
+
+**Public URL:** https://019f9a69-7c76-3f0a-e2b1-c586d1b61682.share.connect.posit.cloud/
+
+**Dashboard:** https://connect.posit.cloud/jackjburleson/content/019f9a69-7c76-3f0a-e2b1-c586d1b61682
+
+This is a Quarto website documenting the full VizAdvisor product — architecture, prompt design, chart taxonomy, analysis service, API routes, and contribution guides — published as a **new** content instance on the Jack J. Burleson Posit Connect Cloud account. Source: `index.qmd`, `_quarto.yml`, `docs/`.
+
+```bash
+cd posit-site
+quarto render
+# Publish updates to the VizAdvisor content id (see _publish.yml):
+python3 scripts/publish_posit_new.py --content-id 019f9a69-7c76-3f0a-e2b1-c586d1b61682
+```
+
 ---
 
 ## Features
@@ -31,6 +46,14 @@ vizadvisor/
 ├── vite.config.js
 ├── index.html
 ├── mermaid-map.md               # Mermaid flowchart of repo structure
+├── posit-site/                  # Quarto → Posit Connect Cloud documentation site
+│   ├── index.qmd                # Site homepage
+│   ├── _quarto.yml              # Quarto website config
+│   ├── _publish.yml             # Posit Connect Cloud content id / URL
+│   ├── styles.scss              # UW Badger red theme
+│   ├── references.bib
+│   ├── docs/                    # Quarto pages (+ includes of ../docs)
+│   └── scripts/publish_posit_new.py
 │
 ├── public/
 │   └── vite.svg

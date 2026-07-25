@@ -1,0 +1,103 @@
+---
+title: "Chart Taxonomy"
+subtitle: "Goal categories and scored candidate charts from chartTypeMapper.js"
+---
+
+VizAdvisor maps each visualization **goal** to a ranked list of chart candidates. Scores guide the LLM’s candidate evaluation stage and provide a deterministic baseline for tests.
+
+Source of truth: `src/utils/chartTypeMapper.js`.
+
+## Goal → candidates
+
+### Comparison
+
+| Chart | Score | Best for | Notes |
+|-------|------:|----------|-------|
+| Bar chart | 10 | nominal, ordinal | Primary |
+| Grouped bar chart | 9 | nominal, ordinal | Needs ≥2 series columns |
+| Dot plot | 7 | nominal | |
+| Radar chart | 4 | ordinal | Use only when shape pattern matters; max 10 axes |
+
+### Trend
+
+| Chart | Score | Best for | Notes |
+|-------|------:|----------|-------|
+| Line chart | 10 | temporal | Primary |
+| Area chart | 8 | temporal | |
+| Stacked area | 6 | temporal | ≥2 series |
+| Candlestick | 5 | temporal | Financial domain |
+
+### Distribution
+
+| Chart | Score | Best for | Notes |
+|-------|------:|----------|-------|
+| Histogram | 10 | quantitative | Primary |
+| Density plot | 9 | quantitative | |
+| Box plot | 8 | quantitative | |
+| Violin plot | 7 | quantitative | |
+| Beeswarm | 5 | quantitative | Prefer ≤300 rows |
+
+### Correlation
+
+| Chart | Score | Best for | Notes |
+|-------|------:|----------|-------|
+| Scatter plot | 10 | quantitative | Primary |
+| Bubble chart | 8 | quantitative | ≥3 columns |
+| Heatmap | 7 | quantitative, ordinal | |
+| Parallel coordinates | 6 | quantitative | ≥4 columns |
+
+### Part-of-whole
+
+| Chart | Score | Best for | Notes |
+|-------|------:|----------|-------|
+| Stacked bar | 10 | nominal, ordinal | Primary |
+| Treemap | 8 | nominal | |
+| Waffle chart | 6 | nominal | ≤4 categories |
+| Pie chart | 5 | nominal | ≤5 categories |
+| Donut chart | 5 | nominal | ≤5 categories |
+
+### Geospatial
+
+| Chart | Score | Best for |
+|-------|------:|----------|
+| Choropleth map | 10 | geographic |
+| Symbol map | 9 | geographic |
+| Dot density map | 7 | geographic |
+| Flow map | 6 | geographic |
+
+### Network & flow
+
+| Chart | Score | Best for |
+|-------|------:|----------|
+| Sankey diagram | 10 | nominal |
+| Chord diagram | 8 | nominal |
+| Force graph | 7 | nominal |
+| Tree / dendrogram | 6 | nominal |
+
+### Ranking
+
+| Chart | Score | Best for |
+|-------|------:|----------|
+| Sorted bar chart | 10 | nominal, ordinal |
+| Lollipop chart | 8 | nominal |
+| Bump chart | 7 | nominal, temporal |
+| Slope chart | 6 | nominal, temporal |
+
+## Golden-path fixtures
+
+Prompt evaluation fixtures under `tests/prompts/` encode expected chart families:
+
+| Fixture | Goal | Expected primary family |
+|---------|------|-------------------------|
+| `comparison-goal.json` | Sales by category | bar (must not recommend pie / 3D / rainbow) |
+| `trend-goal.json` | Time series | line / area family |
+| `distribution-goal.json` | Numeric spread | histogram / density / box family |
+
+```bash
+npm run test:prompts
+```
+
+## Related docs
+
+- [Data Viz Reference](DATA-VIZ-REFERENCE.md) — full encoding principles and pitfalls
+- [Prompt Design](PROMPT-DESIGN.md) — how the taxonomy feeds Stage 4 candidate evaluation

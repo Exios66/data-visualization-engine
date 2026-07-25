@@ -1,0 +1,6 @@
+---
+title: "Changelog"
+subtitle: "Version history for VizAdvisor"
+---
+
+{{< include CHANGELOG.md >}}

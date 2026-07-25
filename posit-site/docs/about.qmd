@@ -1,0 +1,40 @@
+---
+title: "About VizAdvisor"
+subtitle: "What the tool does, how it reasons, and how data is handled"
+---
+
+## What it does
+
+VizAdvisor is a front-end application that connects your dataset and communication goal to a large language model trained on best practices from the data visualization literature. It analyzes your schema, task, audience, and constraints to recommend the optimal chart type, encoding decisions, color palette, interactivity patterns, and accessibility approach — then generates working code in your preferred library.
+
+Optional **pre-** and **post-visualization** statistical analysis runs through R or Python via a self-hostable Express proxy (`/api/analyze`).
+
+## Theoretical foundation
+
+Recommendations are grounded in a curated body of visualization research:
+
+- Edward Tufte — data-ink ratio, chartjunk, small multiples
+- Tamara Munzner — What–Why–How framework, channel effectiveness
+- Alberto Cairo — truthful, functional, and beautiful visualization
+- Stephen Few — perceptual efficiency and dashboard design
+- Colin Ware — visual perception and pre-attentive attributes
+- Claus Wilke — principles of figure design
+
+These principles are encoded in the system prompt (`src/services/promptTemplates.js`) and expanded in [Data Viz Reference](DATA-VIZ-REFERENCE.md) and [Prompt Design](PROMPT-DESIGN.md).
+
+## Privacy
+
+- **Recommendations** use only column schema, a small sample of rows (**5 rows maximum**), and row count — sent to the LLM API. Raw data files are never transmitted for recommendations.
+- **Run Analysis** (pre- or post-viz) sends data rows (up to 1,000) to the analysis server to run R or Python scripts. The server can be self-hosted; no data is stored by design. For full privacy, skip the analysis feature.
+
+## Technology
+
+Built with React, Vite, and Tailwind CSS. Powered by Anthropic’s Claude API (OpenAI optional). Chart library recommendations cover Recharts, D3.js, Plotly, Chart.js, Vega-Lite, Observable Plot, Matplotlib, Altair, and ggplot2.
+
+This documentation site is a Quarto website published to Posit Connect Cloud under the Jack J. Burleson account.
+
+## Author
+
+**Jack J. Burleson** — [github.com/Exios66](https://github.com/Exios66) · University of Wisconsin–Madison
+
+Repository: [github.com/Exios66/vizadvisor](https://github.com/Exios66/vizadvisor)

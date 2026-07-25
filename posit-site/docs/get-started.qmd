@@ -1,0 +1,133 @@
+---
+title: "Get Started"
+subtitle: "Install, configure, and run VizAdvisor locally"
+---
+
+## Prerequisites
+
+- **Node.js** 18+
+- **npm** (or yarn)
+- **(Optional)** R and Python 3 for analysis features
+- An Anthropic or OpenAI API key for LLM recommendations
+
+## Quick start
+
+```bash
+git clone https://github.com/Exios66/vizadvisor.git
+cd vizadvisor
+npm install
+cp .env.example .env
+# Edit .env: set VITE_ANTHROPIC_API_KEY or VITE_OPENAI_API_KEY (dev-only)
+```
+
+### Option A — Frontend only (dev)
+
+```bash
+npm run dev
+```
+
+API keys in the client are for local development only — not recommended for shared environments.
+
+### Option B — Full stack (recommended)
+
+```bash
+cp server/.env.example server/.env
+# Edit server/.env: set ANTHROPIC_API_KEY (or OpenAI)
+npm run dev:full
+# Opens http://localhost:5173
+```
+
+### One-command launcher
+
+```bash
+./run.sh
+```
+
+Installs dependencies, starts Vite + Express, waits for readiness, and opens `http://localhost:5173/advisor`.
+
+## Production build
+
+```bash
+npm run build
+npm run preview
+```
+
+For production, run the Express server separately and serve the built assets (or reverse-proxy). Set `VITE_API_PROXY_URL` to your production API URL. Keep API keys **only** in `server/.env`.
+
+## Environment variables
+
+### Client (`.env`)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_LLM_PROVIDER` | `anthropic` or `openai` | `anthropic` |
+| `VITE_ANTHROPIC_API_KEY` | Anthropic API key | — |
+| `VITE_OPENAI_API_KEY` | OpenAI API key | — |
+| `VITE_DEFAULT_MODEL` | Model name | `claude-sonnet-4-6` |
+| `VITE_API_PROXY_URL` | Proxy URL for LLM + analysis | — |
+| `VITE_ANALYSIS_TIMEOUT_MS` | Analysis request timeout | `60000` |
+| `VITE_MAX_TOKENS` | LLM max tokens | `2048` |
+| `VITE_REQUEST_TIMEOUT_MS` | LLM request timeout | `30000` |
+| `VITE_APP_ENV` | App environment | `development` |
+| `VITE_REPO_URL` | GitHub repo link in header | — |
+
+### Server (`server/.env`)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ANTHROPIC_API_KEY` | Anthropic API key (server-side) | — |
+| `LLM_PROVIDER` | `anthropic` or `openai` | `anthropic` |
+| `PORT` | Server port | `3001` |
+| `ALLOWED_ORIGIN` | CORS origin | `http://localhost:5173` |
+| `ANALYSIS_TIMEOUT_MS` | Analysis script timeout | `60000` |
+| `R_PATH` | Path to Rscript | `Rscript` |
+| `PYTHON_PATH` | Path to python3 | `python3` |
+
+## Analysis packages (optional)
+
+### R
+
+```r
+install.packages(
+  c("jsonlite", "dplyr", "tidyr", "broom", "car", "pwr", "lavaan"),
+  repos = "https://cloud.r-project.org"
+)
+```
+
+### Python
+
+```bash
+pip install -r server/requirements.txt
+```
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Vite only |
+| `npm run dev:full` | Vite + Express |
+| `npm run server` | Express only |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npm test` | Vitest suite |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier |
+
+## Quarto documentation site
+
+This Posit Connect Cloud site is built from the repository with Quarto:
+
+```bash
+cd posit-site
+quarto check
+quarto render          # writes posit-site/_site/
+quarto preview
+```
+
+Publish updates to the VizAdvisor Connect Cloud content instance (never reuse the PSYCH 755 content id):
+
+```bash
+cd posit-site
+# Authenticate once (device code or env tokens), then:
+python3 scripts/publish_posit_new.py --content-id 019f9a69-7c76-3f0a-e2b1-c586d1b61682
+```
