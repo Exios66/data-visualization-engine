@@ -36,7 +36,7 @@ nocite: |
 [Exios66 profile](https://github.com/Exios66){.github-btn}
 :::
 
-## 1 Overview
+## Overview
 
 VizAdvisor is a **frontend-first** SME (subject matter expert) visualization advisor. Users upload or paste CSV/JSON data, select a communication goal, set audience and tooling constraints, and receive a validated JSON recommendation that drives a rich UI: primary chart, alternatives, design decisions, pitfall warnings, follow-up questions, and a syntax-highlighted code scaffold.
 
@@ -53,7 +53,7 @@ The application is intentionally modular. Prompt construction, LLM communication
 | F4 | Privacy-aware defaults | Recommendations send schema + ≤5 sample rows; analysis is opt-in and self-hostable |
 :::
 
-## 2 Core data flow
+## Core data flow
 
 ```{mermaid}
 flowchart LR
@@ -74,7 +74,7 @@ flowchart LR
 6. **Render** recommendation cards, alternatives, design decisions, pitfalls, code, export.
 7. **Optional post-viz analysis** on the same engines.
 
-## 3 Feature highlights
+## Feature highlights
 
 ::: {.feature-grid}
 ::: {.feature-card}
@@ -103,7 +103,7 @@ Copy or download Markdown/JSON; session history persisted in `localStorage`.
 :::
 :::
 
-## 4 Tech stack
+## Tech stack
 
 | Layer | Choice |
 |-------|--------|
@@ -118,7 +118,7 @@ Copy or download Markdown/JSON; session history persisted in `localStorage`.
 | Testing | Vitest + Testing Library |
 | This site | Quarto website → Posit Connect Cloud |
 
-## 5 Documentation map
+## Documentation map
 
 | Page | Contents |
 |------|----------|
@@ -133,7 +133,7 @@ Copy or download Markdown/JSON; session history persisted in `localStorage`.
 | [Repository Map](docs/repository-map.qmd) | Mermaid map of the monorepo |
 | [About](docs/about.qmd) | Theory foundation, privacy, technology |
 
-## 6 Application routes
+## Application routes
 
 | Path | Description |
 |------|-------------|
@@ -143,7 +143,7 @@ Copy or download Markdown/JSON; session history persisted in `localStorage`.
 
 API: `POST /api/recommend` (LLM proxy), `POST /api/analyze` (R/Python).
 
-## 7 Quick start
+## Quick start
 
 ```bash
 git clone https://github.com/Exios66/vizadvisor.git
@@ -158,7 +158,7 @@ cp server/.env.example server/.env
 
 See [Get Started](docs/get-started.qmd) for full environment variable tables and analysis package setup.
 
-## 8 License & authorship
+## License & authorship
 
 Personal development project by [Jack J. Burleson](https://github.com/Exios66) (GitHub: Exios66 / jjburleson). Source: [github.com/Exios66/vizadvisor](https://github.com/Exios66/vizadvisor).
 
